@@ -2,7 +2,7 @@
 
 julia_version = "1.8.1"
 manifest_format = "2.0"
-project_hash = "0ed05d4eb1494ba4a5bb1c4e8ca4ad250f0fb8b2"
+project_hash = "d21db3454e91ae9182c6f89c8cf384b66d15a960"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -34,6 +34,18 @@ version = "1.6.0"
 
 [[deps.FileWatching]]
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
+
+[[deps.Hwloc]]
+deps = ["Hwloc_jll", "Statistics"]
+git-tree-sha1 = "8338d1bec813d12c4c0d443e3bdf5af564fb37ad"
+uuid = "0e44f5e4-bd66-52a0-8798-143a42290a1d"
+version = "2.2.0"
+
+[[deps.Hwloc_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "88c403452c6557786b0a08256b224cc1a6670c71"
+uuid = "e33a78d0-f292-5ffc-b300-72abe9b543c8"
+version = "2.8.0+1"
 
 [[deps.IntelOpenMP_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -150,6 +162,14 @@ uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
 [[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
+
+[[deps.SparseArrays]]
+deps = ["LinearAlgebra", "Random"]
+uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+
+[[deps.Statistics]]
+deps = ["LinearAlgebra", "SparseArrays"]
+uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [[deps.TOML]]
 deps = ["Dates"]
