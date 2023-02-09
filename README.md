@@ -17,7 +17,11 @@ This repository is mostly forked from [`ClusterManagers.jl`](https://github.com/
     ```
 
 ## Extra functionalities
-1. The `worker_info` can show the information of workers (with the package `Hwloc`) as a dictionary.
+1. Now, `Base.Threads` and `LinearAlgebra` are loaded the first when `addprocs_slurm` successful has connected all the required nodes. They are using **everywhere** which is equivalent to a statement in global scope.
+    ```julia
+    @everywhere using LinearAlgebra, Base.Threads
+    ```
+2. The `worker_info` can show the information of workers (with the package `Hwloc`) as a dictionary.
     ```julia
     "worker_id"    => myid(),                     # worker ID
     "cpu"          => Sys.cpu_info()[1].model,    # CPU model
@@ -26,6 +30,10 @@ This repository is mostly forked from [`ClusterManagers.jl`](https://github.com/
     "blas_threads" => BLAS.get_num_threads(),     # BLAS threads
     "blas_config"  => BLAS.get_config(),          # BLAS configuration
     "mem_free_GB"  => Sys.free_memory() / (2^30)  # free memory in GB
+    ```
+    This can be done by a `remotecall_fetch` :
+    ```julia
+    worker_info_i = remotecall_fetch(worker_info, i)
     ```
 
 ## Test and reliability
