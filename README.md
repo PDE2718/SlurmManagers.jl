@@ -25,11 +25,11 @@ This repository is mostly forked from [`ClusterManagers.jl`](https://github.com/
     "nthreads"     => Threads.nthreads(),         # Julia threads
     "blas_threads" => BLAS.get_num_threads(),     # BLAS threads
     "blas_config"  => BLAS.get_config(),          # BLAS configuration
-    "mem_free"     => Sys.free_memory() / (2^30)  # free memory in GB
+    "mem_free_GB"  => Sys.free_memory() / (2^30)  # free memory in GB
     ```
 
 ## Test and reliability
-The functionalities are tests on a slurm cluster with Intel Xeon CPUs. We assume that MKL.jl is installed. If not, or you want to use it on a cluster with AMD CPUs, it is recommended to set `enable_MKL=false`.
+The functionalities are tests on a slurm cluster with Intel Xeon CPUs. We assume that `MKL.jl` is being used and by default `enable_MKL=true`. If you use open-blas, or you want to use it on a cluster with AMD CPUs, it is recommended to set `enable_MKL=false`.
 
 ## Example of usage
 

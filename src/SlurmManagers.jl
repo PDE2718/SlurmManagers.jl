@@ -4,7 +4,7 @@ using Distributed
 using Sockets
 using Pkg
 
-export launch, manage, kill, init_worker, connect
+export launch, manage, kill, init_worker, connect, rm_all_procs
 import Distributed: launch, manage, kill, init_worker, connect
 
 worker_cookie() = begin
@@ -147,6 +147,7 @@ function addprocs_slurm(partition::String, enable_MKL=true; kwargs...)
         eval(quote
             @everywhere using MKL
         end)
+        println("MKL enabled")
     end
     eval(quote
         @everywhere using LinearAlgebra, Base.Threads
@@ -159,7 +160,7 @@ function addprocs_slurm(partition::String, enable_MKL=true; kwargs...)
                 "nthreads" => Threads.nthreads(),
                 "blas_threads" => BLAS.get_num_threads(),
                 "blas_config" => BLAS.get_config(),
-                "mem_free" => Sys.free_memory() / (2^30)
+                "mem_free_GB" => Sys.free_memory() / (2^30)
             )
             return info
         end
