@@ -1,0 +1,13 @@
+name = "SlurmManagers"
+uuid = "9d39fcd0-f3e4-4001-b3d4-0729f0518617"
+authors = ["PDE2718 <1095729268@qq.com> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
