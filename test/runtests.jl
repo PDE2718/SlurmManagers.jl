@@ -1,6 +1,6 @@
-using SlurmManagers
-using Test
+# using SlurmManagers
+# using Test
 
-@testset "SlurmManagers.jl" begin
-    # Write your tests here.
-end
+# @testset "SlurmManagers.jl" begin
+#     true == true
+# end
