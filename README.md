@@ -39,6 +39,67 @@ This repository is mostly forked from [`ClusterManagers.jl`](https://github.com/
 ## Test and reliability
 The functionalities are tests on a slurm cluster with Intel Xeon CPUs. We assume that `MKL.jl` is being used and by default `enable_MKL=true`. If you use open-blas, or you want to use it on a cluster with AMD CPUs, it is recommended to set `enable_MKL=false`.
 
+## Installation
+
+You can install the package by running
+```julia
+using Pkg
+Pkg.add("https://github.com/PDE2718/SlurmManagers.jl")
+```
+
 ## Example of usage
 
-TODO..TODO
+#### Worker setup
+First let's import some package. Please note that `MKL/LinearAlgebra` are imported everywhere implicitly when you use `SlurmManagers`. Other packages should be decorated by a `@everywhere` macro.
+
+```julia
+using MKL, LinearAlgebra
+using Distributed
+using SlurmManagers
+```
+Now, add the processes and set up the worker pool `wpool` by
+
+```julia
+addprocs_slurm("yourPartition"; ntasks=8, cpus_per_task=12)
+wpool = WorkerPool(workers())
+```
+The test is done on a cluster where each node has two sockets **Intel Xeon Gold 6240R × 2**, **24** cores each, **48** cores in total. The slurm system automatically assigned 2 nodes, each running 4 tasks with 12 physical cores.
+
+#### Check the workers
+We can now interact with the master node and distribute our jobs dynamically! First let's check some information:
+```julia
+remotecall_fetch(myid, 2) # return 2
+remotecall_fetch(worker_info, 3) # return a Dict
+```
+
+#### Define a job
+Let's define a job `myfun` that requires some input arguments, let's say `x`. We just need to include it on each worker.
+
+```julia
+@everywhere begin
+    function myfun(x::Real)
+        N = 1000
+        A = rand(N,N) + x*I |> Symmetric
+        t = @elapsed eigvals(A)
+        return t
+    end
+end
+```
+
+#### Assign a job to a worker
+Now we can get it down on any worker by `remotecall` and `fetch`. Or more simply by a `remotecall_fetch`. For example, we pass `x=5.` to worker 4 and wait it until it finishes its job and return the result:
+```julia
+remotecall_fetch(myfun, 4, 5.) # return t, on the remote worker
+```
+
+#### Assign multiple jobs to all workers. (`pmap`)
+
+```julia
+xs = rand(200)
+
+# 20 core local machine, limited to memory bridge
+@elapsed myfun.(xs) # 14.27 s
+
+# 8 worker / 12 cores each. => 96 cores in total
+@elapsed @sync pmap(myfun, wpool, xs; batch_size=2) # 1.18 s
+```
