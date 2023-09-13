@@ -126,7 +126,7 @@ function addprocs_slurm(partition::String, enable_MKL=true; kwargs...)
         :threads_per_core => 1,
         :topology => :master_worker,
         :job_file_loc => pwd() * "/output",
-        :t => "1000",
+        :t => "24:00:00",
     )
     nkwargs = merge(NamedTuple(), merge(default_params, kwargs))
     println("[Task Summary]")
